@@ -1,9 +1,12 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "serialmanager.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    qmlRegisterType<SerialManager>("Moon", 1, 0, "SerialManager");
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/SerialAndPlot/main.qml"_qs);

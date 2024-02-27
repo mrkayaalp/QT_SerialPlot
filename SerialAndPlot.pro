@@ -1,4 +1,4 @@
-QT += quick
+QT += quick serialport
 
 SOURCES += \
         main.cpp \
