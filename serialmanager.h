@@ -6,6 +6,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QPointF>
+#include <QDateTime>
+#include <fstream>
 
 
 class SerialManager : public QObject
@@ -18,6 +20,8 @@ class SerialManager : public QObject
     Q_PROPERTY(qint32 baudRate READ baudRate WRITE setBaudRate NOTIFY baudRateChanged )
 
     Q_PROPERTY(bool connectStatus READ connectStatus WRITE setConnectStatus NOTIFY connectStatusChanged)
+
+    Q_PROPERTY(QPointF accelx READ accelx WRITE setAccelx NOTIFY accelxChanged )
 public:
     explicit SerialManager(QObject *parent = nullptr);
 
@@ -32,6 +36,9 @@ public:
     bool connectStatus() const;
 
 
+    QPointF accelx() const;
+    void setAccelx(QPointF newAccelx);
+
 signals:
 
     void comNameChanged();
@@ -40,8 +47,13 @@ signals:
 
     void connectStatusChanged( bool currentStatus );
 
+    void accelxChanged();
+
 public slots:
     Q_INVOKABLE void setConnectStatus(bool newConnectStatus);
+
+    //interrupt for QtSerialPort::readRead
+    void dataReady();
 
 
 
@@ -58,6 +70,8 @@ private:
 
     //For COM connection status
     bool _connectStatus;
+
+    QPointF _accelx;
 };
 
 #endif // SERIALMANAGER_H

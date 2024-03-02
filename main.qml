@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import Moon
 import QtQuick.Controls.Material
+import QtCharts
 
 Window {
     id: root
@@ -19,6 +20,13 @@ Window {
 
     SerialManager{
         id: serialManager
+        onAccelxChanged:{
+            lbl_accelx.text = serialManager.accelx.y.toFixed(2) + " g"
+
+            //lineSeriesAccel.append( serialManager.accelx.x, serialManager.accelx.y.toFixed(2) );
+            lineSeriesAccel.replace( serialManager.accelx.x, serialManager.accelx.y.toFixed(2));
+
+        }
     }
 
 
@@ -58,6 +66,7 @@ Window {
             ListElement { baud: 9600 }
             ListElement { baud: 19200 }
             ListElement { baud: 38400 }
+            ListElement { baud: 115200}
         }
         textRole: "baud"
 
@@ -110,5 +119,80 @@ Window {
                 serialManager.setConnectStatus(false)
             }
         }
+    }
+
+    Label{
+        id: lbl_accelx
+        x: 380
+        y: 20
+        anchors{
+            left: accelPlot.right
+            leftMargin: 5
+        }
+
+        width: 60
+        height: 30
+        color: "black"
+        // Both are ways to print degree symbol
+        // text: qsTr("0.0") + qsTr("\u2103")
+        text: "0.00" + " g"
+        //horizontalAlignment: Text.AlignHCenter
+        //verticalAlignment: Text.AlignVCenter
+        font.pointSize: 14
+    }
+
+    ChartView {
+        id: accelPlot
+        title: "Accel"
+        titleFont.bold: true
+        titleFont.pixelSize: 12
+        width: 400
+        height: 400
+
+        //güzel bir efekt olabilir
+        dropShadowEnabled: true
+
+        anchors{
+            left: parent.left
+            leftMargin: 20
+        }
+        //legend
+        //legend.alignment: Qt.AlignBottom
+        legend.markerShape: Legend.MarkerShapeCircle
+        legend.backgroundVisible: false
+        legend.color: "black"
+
+        antialiasing: true
+
+        ValuesAxis {
+          id: axisyAccel
+          min: -5
+          max: +5
+          gridVisible: true
+          tickCount: 7
+          titleText: "accel-x"
+          titleFont.bold: true
+          titleFont.italic: true
+          titleFont.pointSize: 10
+        }
+
+        DateTimeAxis {
+          id: axisxAccel
+          gridVisible: true
+          format: "hh:mm:ss"
+          tickCount: 10
+          titleText: "Time"
+          titleFont.bold: true
+          titleFont.italic: true
+          titleFont.pointSize: 10
+        }
+
+        LineSeries {
+          id: lineSeriesAccel
+          axisX: axisxAccel
+          axisY: axisyAccel
+        }
+
+
     }
 }

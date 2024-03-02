@@ -1,4 +1,4 @@
-QT += quick serialport
+QT += quick serialport gui core widgets
 
 SOURCES += \
         main.cpp \
